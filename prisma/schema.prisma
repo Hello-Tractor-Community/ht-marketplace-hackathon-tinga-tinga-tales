@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DEALER
+  SELLER
+  OPERATOR
+  CUSTOMER
+}
+
+enum ProductStatus {
+  unapproved
+  approved
+  archived
+}
+
+enum UserStatus {
+  Unapproved
+  Pending
+  Approved
+  Banned
+}
+
+model User {
+  id          String     @id @default(cuid())
+  google_id   String?    @unique
+  email       String     @unique
+  is_verified Boolean    @default(false)
+  password    String?
+  phone       String?    @unique
+  name        String
+  role        Role       @default(CUSTOMER)
+  status      UserStatus @default(Pending)
+  dealer      Dealer?    @relation(name: "DealerUser")
+  operator    Operator?  @relation(name: "OperatorUser")
+  seller      Seller?    @relation(name: "SellerUser")
+  orders      Order[]    @relation("CustomerOrders")
+  bids        Bid[]      @relation("UserBids")
+  products    Product[]  @relation("OwnerProducts")
+  image       String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now())
+
+  sessions             Session[]
+  emailVerification    EmailVerification[]
+  PasswordResetSession PasswordResetSession[]
+
+  wishlist Wishlist?
+}
+
+model Session {
+  id         String   @id
+  userId     String
+  expires_at DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model PasswordResetSession {
+  id             String   @id
+  userId         String
+  code           String
+  email          String
+  expires_at     DateTime
+  email_verified Boolean  @default(false)
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model EmailVerification {
+  id         String   @id
+  userId     String
+  code       String
+  email      String
+  expires_at DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Wishlist {
+  id       String            @id @default(cuid())
+  user_id  String            @unique
+  user     User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  products WishlistProduct[]
+}
+
+model WishlistProduct {
+  id          String   @id @default(cuid())
+  wishlist_id String
+  product_id  String
+  wishlist    Wishlist @relation(fields: [wishlist_id], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model Dealer {
+  user_id               String         @unique
+  user                  User           @relation(fields: [user_id], references: [id], name: "DealerUser", onDelete: Cascade)
+  location              String
+  description           String
+  business_permit_image String
+  order_products        OrderProduct[]
+}
+
+model Seller {
+  user_id        String         @unique
+  user           User           @relation(fields: [user_id], references: [id], name: "SellerUser", onDelete: Cascade)
+  description    String
+  location       String
+  order_products OrderProduct[]
+}
+
+model Operator {
+  user           User                    @relation(fields: [user_id], references: [id], name: "OperatorUser", onDelete: Cascade)
+  user_id        String                  @unique
+  location       String
+  rate_card      Float
+  description    String
+  experience     OperatorExperienceType  @default(BEGINNER)
+  certifications OperatorCertification[] @relation("OperatorCertifications")
+}
+
+enum OperatorExperienceType {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
+
+model OperatorCertification {
+  id                  String   @id @default(cuid())
+  name                String
+  certification_image String
+  user_id             String
+  operator            Operator @relation(fields: [user_id], references: [user_id], name: "OperatorCertifications", onDelete: Cascade)
+}
+
+model Product {
+  id                String         @id @default(cuid())
+  name              String
+  owner_id          String
+  owner             User           @relation(fields: [owner_id], references: [id], name: "OwnerProducts", onDelete: Cascade)
+  status            ProductStatus  @default(unapproved)
+  description       String
+  location          String
+  price             Float
+  quantity_in_stock Int?
+  model             String
+  used_time         String?
+  year              String?
+  history           String?
+  brand_id          String
+  brand             Brand          @relation(fields: [brand_id], references: [name], name: "BrandProducts", onDelete: Cascade)
+  product_images    ProductImage[] @relation("ProductImages")
+  category_id       String
+  category          Category       @relation(fields: [category_id], references: [name], name: "CategoryProducts", onDelete: Cascade)
+  sub_category_id   String?
+  sub_category      SubCagetory?   @relation(fields: [sub_category_id], references: [name], name: "SubcategoryProducts")
+  order_product     OrderProduct[]
+  Bid               Bid[]
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @default(now())
+
+  wishlists WishlistProduct[]
+}
+
+model ProductImage {
+  id         String  @id @default(cuid())
+  image      String
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id], name: "ProductImages", onDelete: Cascade)
+}
+
+model Brand {
+  name    String    @id @unique
+  logo    String
+  Product Product[] @relation(name: "BrandProducts")
+}
+
+model Category {
+  name           String        @id @unique
+  description    String
+  products       Product[]     @relation(name: "CategoryProducts")
+  sub_categories SubCagetory[] @relation(name: "CategorySubCategories")
+}
+
+model SubCagetory {
+  name        String    @id @unique
+  description String
+  category_id String
+  category    Category  @relation(fields: [category_id], references: [name], name: "CategorySubCategories", onDelete: Cascade)
+  products    Product[] @relation(name: "SubcategoryProducts")
+}
+
+enum OrderStatus {
+  PENDING
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id          String         @id @default(cuid())
+  total       Float
+  created_at  DateTime       @default(now())
+  status      OrderStatus    @default(PENDING)
+  customer_id String
+  customer    User           @relation(fields: [customer_id], references: [id], name: "CustomerOrders", onDelete: Cascade)
+  products    OrderProduct[]
+}
+
+model OrderProduct {
+  id         String      @id @default(cuid())
+  order_id   String
+  status     OrderStatus @default(PENDING)
+  order      Order       @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  quantity   Int
+  product_id String
+  product    Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  dealer_id  String?
+  dealer     Dealer?     @relation(fields: [dealer_id], references: [user_id], onDelete: Cascade)
+  seller_id  String?
+  seller     Seller?     @relation(fields: [seller_id], references: [user_id], onDelete: Cascade)
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Bid {
+  id         String    @id @default(cuid())
+  price      Float
+  status     BidStatus @default(PENDING)
+  product_id String
+  product    Product   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user_id    String
+  user       User      @relation(fields: [user_id], references: [id], name: "UserBids", onDelete: Cascade)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+}

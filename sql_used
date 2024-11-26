@@ -1,0 +1,165 @@
+-- Insert Users
+INSERT INTO "User" (id, google_id, email, password, phone, name, role, status)
+VALUES
+  ('user1_id','1aqw', 'user1@example.com', 'securepassword1', '1234567890', 'User One', 'CUSTOMER', 'Unapproved'),
+  ('user2_id','1aqm', 'user2@example.com', 'securepassword2', '1234567891', 'User Two', 'DEALER', 'Unapproved'),
+  ('user3_id', '1aqkmmm','user3@example.com', 'securepassword3', '1234567892', 'User Three', 'SELLER', 'Unapproved'),
+  ('user4_id', '1aqwqqw','user4@example.com', 'securepassword4', '1234567893', 'User Four', 'OPERATOR', 'Unapproved'),
+  ('user5_id', '1aqw12','user5@example.com', 'securepassword5', '1234567894', 'User Five', 'ADMIN', 'Unapproved'),
+  ('user6_id', '1aqw12adsd','user6@example.com', 'securepassword6', '1234567895', 'User Six', 'SELLER', 'Unapproved'),
+  ('user7_id', '1aq122222231w','user7@example.com', 'securepassword7', '1234567896', 'User Seven', 'CUSTOMER', 'Unapproved'),
+  ('user8_id', '1aqw454','user8@example.com', 'securepassword8', '1234567897', 'User Eight', 'CUSTOMER', 'Unapproved'),
+  ('user9_id', '1aqwghdddfjf','user9@example.com', 'securepassword9', '1234567898', 'User Nine', 'CUSTOMER', 'Unapproved'),
+  ('user10_id', '1aqwasdsadsadsa','user10@example.com', 'securepassword10', '1234567899', 'User Ten', 'SELLER', 'Unapproved'),
+  ('user11_id', '121312dsasaqw','user11@example.com', 'securepassword11', '12345678941', 'User Eleven', 'DEALER', 'Unapproved'),
+  ('user12_id', '1aqbbdvgdw','user12@example.com', 'securepassword12', '12345678942', 'User Twelve', 'DEALER', 'Unapproved'),
+  ('user13_id', '1aqnjjnjjnjnjjjjjjw','user13@example.com', 'securepassword13', '12345678943', 'User Thirteen', 'ADMIN', 'Unapproved'),
+  ('user14_id', '1aqoooooooow','user14@example.com', 'securepassword14', '12345678944', 'User Fourteen', 'OPERATOR', 'Unapproved');
+
+-- Insert Dealers
+INSERT INTO "Dealer" (user_id, location, business_permit_image, description)
+VALUES
+  ('user2_id', 'City A', 'permit1_url', 'Description 1'),
+  ('user11_id', 'City B', 'permit2_url', 'Description 2'),
+  ('user12_id', 'City C', 'permit3_url', 'Description 3');
+
+-- Insert Sellers
+INSERT INTO "Seller" (user_id, description, location)
+VALUES
+  ('user3_id', 'Seller 1 Description 1', 'City D'),
+  ('user6_id', 'Seller 2 Description 2', 'City E'),
+  ('user10_id', 'Seller 3 Description 3', 'City F');
+
+-- -- Insert Operators
+INSERT INTO "Operator" (user_id, location, rate_card, experience, description)
+VALUES
+  ('user4_id', 'City A', 100.0, 'BEGINNER', 'Operator 1 descritption 1'),
+  ('user14_id', 'City J', 120.0, 'INTERMEDIATE', 'Operator 2 descritption 2');
+
+-- -- Insert Operator Certifications
+INSERT INTO "OperatorCertification" (id, name, certification_image, user_id)
+VALUES
+  ('cert1_id', 'Cert 1', 'cert1_image_url', 'user4_id'),
+  ('cert2_id', 'Cert 2', 'cert2_image_url', 'user4_id'),
+  ('cert3_id', 'Cert 3', 'cert3_image_url', 'user14_id'),
+  ('cert4_id', 'Cert 4', 'cert4_image_url', 'user14_id'),
+  ('cert5_id', 'Cert 5', 'cert5_image_url', 'user4_id');
+
+-- Insert Brands
+INSERT INTO "Brand" (name, logo)
+VALUES
+('Massey Furguson', 'logo1_url'),
+('Kubota', 'logo2_url'),
+('Sonalika', 'logo3_url'),
+('Yanmar', 'logo4_url'),
+('New Holland', 'logo5_url'),
+('Mahindra', 'logo5_url'),
+('John Deere', 'logo5_url');
+
+-- Insert Categories
+INSERT INTO "Category" (name, description)
+VALUES
+('Tractors', 'Farm Vehicles and Machinery'),
+('Agri-Implements', 'Agricultural Implements'),
+('Dealers', 'Dealers in Agricultural Machinery'),
+('Operators', 'Agricultural Machinery Operators');
+
+-- Insert SubCategories
+INSERT INTO "SubCagetory" (name, description, category_id)
+VALUES
+('Utility Tractors', 'General farm tasks e.g Plowing, Tilling, Hauling', 'Tractors'),
+('Other Farm Vehicles', 'Any other farm vehicle ', 'Tractors'),
+('Compact Tractors', 'Ideal for Small farms landscaping and gardening', 'Tractors'),
+('Speciality Tractors', 'For unique needs like orchads and vineyards', 'Tractors'),
+('Row-Crop Tractors', 'For planting and harvesting crops in rows', 'Tractors'),
+('Harvesters', 'Used for crop harvesting', 'Agri-Implements'),
+('Harrows', 'Breaks up and smooths soil', 'Agri-Implements'),
+('Plows', 'Turns over the soil', 'Agri-Implements'),
+('Spreaders', 'Distributes seeds or fertilizer', 'Agri-Implements'),
+('Seaders', 'Plants seeds in rows', 'Agri-Implements'),
+('Trailers', 'Transports goods and materials', 'Agri-Implements');
+
+-- -- Insert Products
+INSERT INTO "Product" (
+  id, name, owner_id, status, description, location, price, quantity_in_stock, model,
+  used_time, year, history, brand_id, category_id, sub_category_id
+)
+VALUES
+('product1_id', 'Product 1', 'user3_id', 'approved', 'Desc 1', 'Loc 1', 5000.0, 10, 'Model 1', '100 hours', '2020', 'No issues', 'Massey Furguson', 'Tractors', 'Utility Tractors'),
+('product2_id', 'Product 2', 'user2_id', 'approved', 'Desc 2', 'Loc 2', 7000.0, 5, 'Model 2', '200 hours', '2021', 'Minor repairs', 'Kubota', 'Tractors', 'Compact Tractors'),
+('product3_id', 'Product 3', 'user3_id', 'unapproved', 'Desc 3', 'Loc 3', 8000.0, 20, 'Model 3', '300 hours', '2019', 'Major repairs', 'Sonalika', 'Agri-Implements', 'Harrows'),
+('product4_id', 'Product 4', 'user2_id', 'archived', 'Desc 4', 'Loc 4', 9000.0, 15, 'Model 4', '400 hours', '2018', 'Good condition', 'John Deere', 'Agri-Implements', 'Plows'),
+('product5_id', 'Product 5', 'user10_id', 'approved', 'Desc 5', 'Loc 5', 6000.0, 8, 'Model 5', '500 hours', '2022', 'Minor issues', 'New Holland', 'Tractors', 'Speciality Tractors'),
+('product6_id', 'Product 6', 'user9_id', 'approved', 'Desc 6', 'Loc 6', 4000.0, 12, 'Model 6', '600 hours', '2023', 'No issues', 'Yanmar', 'Tractors', 'Row-Crop Tractors'),
+('product7_id', 'Product 7', 'user8_id', 'approved', 'Desc 7', 'Loc 7', 3000.0, 18, 'Model 7', '700 hours', '2024', 'Minor repairs', 'Mahindra', 'Agri-Implements', 'Spreaders'),
+('product8_id', 'Product 8', 'user7_id', 'approved', 'Desc 8', 'Loc 8', 2000.0, 25, 'Model 8', '800 hours', '2025', 'Major repairs', 'New Holland', 'Agri-Implements', 'Seaders'),
+('product9_id', 'Product 9', 'user6_id', 'approved', 'Desc 9', 'Loc 9', 1000.0, 30, 'Model 9', '900 hours', '2026', 'Good condition', 'Yanmar', 'Agri-Implements', 'Trailers'),
+('product10_id', 'Product 10', 'user5_id', 'approved', 'Desc 10', 'Loc 10', 10000.0, 35, 'Model 10', '1000 hours', '2027', 'Minor issues', 'Sonalika', 'Tractors', 'Other Farm Vehicles'),
+('product11_id', 'Product 11', 'user4_id', 'approved', 'Desc 11', 'Loc 11', 11000.0, 40, 'Model 11', '1100 hours', '2028', 'No issues', 'Massey Furguson', 'Tractors', 'Speciality Tractors'),
+('product12_id', 'Product 12', 'user3_id', 'approved', 'Desc 12', 'Loc 12', 12000.0, 45, 'Model 12', '1200 hours', '2029', 'Minor repairs', 'Kubota', 'Tractors', 'Row-Crop Tractors');
+
+-- Insert Product Images
+INSERT INTO "ProductImage" (id, image, product_id)
+VALUES
+('1','https://ht-mobileassets.s3.amazonaws.com/tractorModels/DI-35-removebg-preview.png', 'product1_id'),
+('2','https://s3-us-west-2.amazonaws.com/ht-mobileassets/ti_massey_ferguson_tractor_mf5710.png', 'product2_id'),
+('3','https://ht-mobileassets.s3.amazonaws.com/tractorModels/Yanmar.jpg', 'product3_id'),
+('4','https://ht-mobileassets.s3.amazonaws.com/tractorModels/Case_IH_JX90.png', 'product4_id'),
+('5','https://ht-mobileassets.s3.amazonaws.com/tractorModels/6095B-removebg-preview.png', 'product5_id'),
+('abcde', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/DI-75-removebg-preview.png', 'product6_id'),
+('fghij', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/JD_6XXXB_OOS.png', 'product7_id'),
+('klmno', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/MB-removebg-preview.png', 'product8_id'),
+('pqrst', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/MB75-removebg-preview.png', 'product9_id'),
+('uvwxy', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/TS6-125.png', 'product10_id'),
+('zabcd', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/t6090-removebg-preview.png', 'product11_id'),
+('efghi', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/375A-removebg-preview.png', 'product12_id'),
+('jklmn', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/yanm-removebg-preview.png', 'product1_id'),
+('opqrs', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/JD_TRACTOR_IMAGE-removebg-preview.png', 'product2_id'),
+('tuvwx', 'https://s3-us-west-2.amazonaws.com/ht-mobileassets/ti_massey_ferguson_240.png', 'product3_id'),
+('yzabc', 'https://s3-us-west-2.amazonaws.com/ht-mobileassets/ti_massey_ferguson_400xtra.png', 'product4_id'),
+('defgh', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Valtra_BL88.png', 'product5_id'),
+('ijklm', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/NH_Combine_TC45.png', 'product6_id'),
+('nopqr', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Mahindra_9200.png', 'product7_id'),
+('stuvw', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Farmtrac_6060_Heritage.png', 'product8_id'),
+('xyzab', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/New_Holland_TT75.png', 'product9_id'),
+('cdefg', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Kubota_L3540.png', 'product10_id'),
+('hijkl', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Yanmar_YT359.png', 'product11_id'),
+('mnopq', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Mack_Granite_LR.png', 'product12_id'),
+('rstuv', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Massey_Ferguson_420.png', 'product1_id'),
+('wxyza', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Ford_3910.png', 'product2_id'),
+('bcdef', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Case_IH_JXT95.png', 'product3_id'),
+('ghijk', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Massey_Ferguson_MF188.png', 'product4_id'),
+('lmnop', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Massey_Ferguson_MF290.png', 'product5_id'),
+('qrstu', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Zetor_Proxima_CL100.png', 'product6_id'),
+('vwxyz', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/Same_Laser_130.png', 'product7_id'),
+('abcdejk', 'https://ht-mobileassets.s3.amazonaws.com/tractorModels/McCormick_T110_Max.png', 'product8_id');
+
+-- -- Insert Orders
+-- INSERT INTO "Order" (id, total, created_at, status, customer_id)
+-- VALUES
+--   ('order1_id', 15000.0, NOW(), 'PENDING', 'user1_id'),
+--   ('order2_id', 18000.0, NOW(), 'DELIVERED', 'user7_id'),
+--   ('order3_id', 12000.0, NOW(), 'CANCELLED', 'user8_id'),
+--   ('order4_id', 20000.0, NOW(), 'PENDING', 'user1_id'),
+--   ('order5_id', 17000.0, NOW(), 'DELIVERED', 'user9_id');
+
+-- Insert Order Products
+-- INSERT INTO "OrderProduct" (id, order_id, status, quantity, product_id, dealer_id, seller_id)
+-- VALUES
+--   ('orderproduct1_id', 'order1_id', 'PENDING', 2, 'product1_id', NULL, 'user3_id'),
+--   ('orderproduct2_id', 'order1_id', 'DELIVERED', 1, 'product2_id', 'user2_id', NULL),
+--   ('orderproduct3_id', 'order3_id', 'CANCELLED', 3, 'product3_id', NULL, 'user3_id'),
+--   ('orderproduct4_id', 'order4_id', 'PENDING', 4, 'product4_id', 'user2_id', NULL),
+--   ('orderproduct5_id', 'order2_id', 'DELIVERED', 5, 'product1_id', NULL, 'user3_id'),
+--   ('orderproduct6_id', 'order5_id', 'CANCELLED', 2, 'product5_id', 'user2_id', NULL),
+--   ('orderproduct7_id', 'order5_id', 'DELIVERED', 7, 'product3_id', NULL, 'user10_id'),
+--   ('orderproduct8_id', 'order4_id', 'DELIVERED', 1, 'product2_id', NULL, 'user6_id');
+
+-- -- Insert Bids
+-- INSERT INTO "Bid" (id, price, status, product_id, user_id)
+-- VALUES
+--   ('bid1_id', 4500.0, 'PENDING', 'product1_id', 'user1_id'),
+--   ('bid2_id', 5000.0, 'ACCEPTED', 'product2_id', 'user7_id'),
+--   ('bid3_id', 3500.0, 'REJECTED', 'product3_id', 'user8_id'),
+--   ('bid4_id', 6000.0, 'PENDING', 'product4_id', 'user9_id'),
+--   ('bid5_id', 5500.0, 'PENDING', 'product5_id', 'user1_id');
